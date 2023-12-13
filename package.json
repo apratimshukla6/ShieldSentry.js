@@ -1,0 +1,29 @@
+{
+    "name": "shieldsentry",
+    "version": "1.0.0",
+    "description": "ShieldSentry is a JS wrapper for a language agnostic specification created to prevent security attacks.",
+    "main": "src/shieldsentry.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/apratimshukla6/ShieldSentry.js.git"
+    },
+    "keywords": [
+        "security",
+        "sanitization",
+        "validation",
+        "xss",
+        "sqli"
+    ],
+    "author": "Apratim Shukla",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/apratimshukla6/ShieldSentry.js/issues"
+    },
+    "homepage": "https://github.com/apratimshukla6/ShieldSentry.js#readme",
+    "devDependencies": {
+        "jest": "^27.5.1"
+    }
+}
