@@ -50,5 +50,9 @@
       "user": ["read", "write"],
       "guest": ["read"]
     }
+  },
+  "apiRateLimiting": {
+    "maxRequestsPerMinute": 60,
+    "quotaThreshold": 1000
   }
 }

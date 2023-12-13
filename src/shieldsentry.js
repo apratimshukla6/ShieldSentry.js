@@ -7,6 +7,10 @@ class ShieldSentry {
     constructor() {
         const specificationPath = path.join(__dirname, 'specifications.json');
         this.specification = JSON.parse(fs.readFileSync(specificationPath, 'utf8'));
+        this.roles = this.specification.accessControl.roles;
+        this.permissions = this.specification.accessControl.permissions;
+        this.rateLimiting = this.specification.apiRateLimiting;
+        this.userRequests = {}; // Tracks user requests
     }
 
     validate(inputType, value) {
@@ -54,6 +58,48 @@ class ShieldSentry {
     handleError(errorType) {
         const error = this.specification.errors[errorType];
         console.error(`Error ${error.code}: ${error.message}`);
+    }
+
+    hasPermission(userRole, action) {
+        if (!this.roles.includes(userRole)) {
+            return false;
+        }
+
+        const allowedActions = this.permissions[userRole];
+        return allowedActions.includes('all') || allowedActions.includes(action);
+    }
+
+    isRateLimited(userId) {
+        const currentTime = Date.now();
+        const userRequest = this.userRequests[userId];
+
+        if (!userRequest) {
+            // First request from this user
+            this.userRequests[userId] = { count: 1, lastRequestTime: currentTime, quotaUsed: 1 };
+            return false;
+        }
+
+        if (userRequest.quotaUsed >= this.rateLimiting.quotaThreshold) {
+            // Quota exceeded
+            return true;
+        }
+
+        if (currentTime - userRequest.lastRequestTime > 60000) {
+            // Reset count after 1 minute
+            userRequest.count = 1;
+            userRequest.lastRequestTime = currentTime;
+        } else if (userRequest.count >= this.rateLimiting.maxRequestsPerMinute) {
+            // Rate limit exceeded
+            return true;
+        } else {
+            // Increment request count
+            userRequest.count++;
+        }
+
+        // Increment quota used
+        userRequest.quotaUsed++;
+
+        return false;
     }
 }
 

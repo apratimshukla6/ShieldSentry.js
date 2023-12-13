@@ -1,6 +1,6 @@
 {
     "name": "shieldsentry",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "ShieldSentry is a JS wrapper for a language agnostic specification created to prevent security attacks.",
     "main": "src/shieldsentry.js",
     "scripts": {
